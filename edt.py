@@ -4,6 +4,7 @@ import pyift.queue as Queue
 import pyift.adjacency as Adjacency
 import pyift.image as Image
 import pyift.common as Common
+import time
 
 # F(<trivial>) = 0
 # F(<path_extension>) = euclidean_distance(q, root(p))
@@ -11,15 +12,15 @@ import pyift.common as Common
 
 # Creating a simple binary image of size 6 x 6.
 # Image is an array not an matrix.
-orig = Image.Image(6, 6, 1)
-orig.create_simple_image()
-# print orig
-# 0   0   0   0   0   0
-# 0   1   1   1   0   0
-# 0   1   0   1   0   0
-# 0   1   0   1   0   0
-# 0   1   1   1   0   0
-# 0   0   0   0   0   0
+# orig = Image.Image(6, 6, 1)
+# orig.create_simple_image()
+
+# Creating a "complex" binary image imported from 'leaf.pgm'.
+# leaf.pgm file is available at [afalcao/ift-demo](https://github.com/afalcao/ift-demo),
+# under demo/eucldist
+orig = Image.Image.create_complex_image('leaf.pgm')
+
+start_time = time.time()
 
 # Distance array with INFINITY assigned to each pixel.
 distance = Image.Image(orig.xsize, orig.ysize, orig.zsize)
@@ -73,11 +74,7 @@ while not Q.empty():
                 # Keep propagating.
                 Q.insert(q)
 
+print('--- %s seconds ---' % (time.time() - start_time))
 
-print distance
-# 1.4   1.0   1.0   1.0   1.4   2.2
-# 1.0   0.0   0.0   0.0   1.0   2.0
-# 1.0   0.0   1.0   0.0   1.0   2.0
-# 1.0   0.0   1.0   0.0   1.0   2.0
-# 1.0   0.0   0.0   0.0   1.0   2.0
-# 1.4   1.0   1.0   1.0   1.4   2.2
+# print distance
+distance.write_to_file('distance')
